@@ -11,7 +11,7 @@ typedef vector<vector<int> > matrix;
 
 void create_graph_file(const char* path) {
     ofstream file(path);
-    uint n_rows = 1000;//10 + rand() % 10;
+    uint n_rows = 3;//10 + rand() % 10;
     uint n_cols = n_rows;//10 + rand() % 10;
     int maxn = 3, tmp, d = 0;
     
@@ -42,7 +42,7 @@ matrix parse_file(const char* path) {
     
     matrix graph(n_rows, vector<int>(n_cols));
     
-    //cout<<"n_rows = "<<n_rows<<" n_cols = "<<n_cols<<endl;
+    cout<<"n_rows = "<<n_rows<<" n_cols = "<<n_cols<<endl;
     
     for (uint i = 0; i < n_rows; ++i) {
 	for (uint j = 0; j < n_cols; ++j) {
@@ -66,7 +66,7 @@ void print_matrix(const matrix& m) {
     cout<<endl;
 }
 
-matrix floyd(const matrix& graph) {
+matrix apsp(const matrix& graph) {
     uint n = graph.size();
     matrix result = graph;
     
@@ -85,17 +85,17 @@ matrix floyd(const matrix& graph) {
 }
 
 int main(int argc, char** argv) try {
-    //cout<<"Hi\n";
+    #ifdef _OPENMP
+	printf("OpenMP is supported!\n");
+    #endif
+    
     srand(time(0));
     const char* path = "graph_matrix.txt";
     
     create_graph_file(path);
-    time_t lt = time(0);
-    matrix graph = parse_file(path);
-    matrix shortest_paths = floyd(graph);
-    cout<<"Time is equal "<<(time(0) - lt)<<endl;
-    //print_matrix(graph);
-    //print_matrix(shortest_paths);
+    matrix graph = parse_file(path), shortest_paths = apsp(graph);
+    print_matrix(graph);
+    print_matrix(shortest_paths);
     
     return 0;
 } catch(const char* str) {
