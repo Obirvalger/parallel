@@ -1,16 +1,19 @@
-CF = -std=c++11 -x c++ -O3 -c
-TARGET = main
+CF = -std=c++11 -fopenmp -O3 -o
+TARGET = main main_p test test_p
 
 all: $(TARGET)
 
-main.o: main.cpp
-	g++  $(CF) -c main.cpp
+main: main.cpp
+	g++  main.cpp $(CF) main
 
-$(TARGET): main.o
-	g++ -std=c++11 main.o -o $(TARGET)
+main_p: main_p.cpp
+	g++  main_p.cpp $(CF) main_p
 
 test: test.cpp
-	g++  test.cpp -std=c++11 -O3 -o test
+	g++  test.cpp $(CF) test
+	
+test_p: test_p.cpp
+	g++  test_p.cpp $(CF) test_p
 
 clean:
 	rm -rf $(TARGET) *.o

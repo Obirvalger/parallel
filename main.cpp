@@ -3,6 +3,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
+#include <omp.h>
 
 using namespace std;
 
@@ -11,12 +12,14 @@ typedef vector<vector<int> > matrix;
 
 void create_graph_file(const char* path) {
     ofstream file(path);
-    uint n_rows = 1000;//10 + rand() % 10;
+    uint n_rows = 600;//10 + rand() % 10;
     uint n_cols = n_rows;//10 + rand() % 10;
     int maxn = 3, tmp, d = 0;
     
     file<<n_rows<<endl<<n_cols<<endl;
-    
+
+#pragma omp parallel    
+#pragma omp for
     for (uint i = 0; i < n_rows; ++i) {
 	for (uint j = 0; j < n_rows; ++j) {
 	    tmp = rand() % (maxn + 1) - d; 
@@ -90,10 +93,10 @@ int main(int argc, char** argv) try {
     const char* path = "graph_matrix.txt";
     
     create_graph_file(path);
-    time_t lt = time(0);
+    double lt = omp_get_wtime();
     matrix graph = parse_file(path);
     matrix shortest_paths = floyd(graph);
-    cout<<"Time is equal "<<(time(0) - lt)<<endl;
+    printf("Time is equal %g\n", omp_get_wtime() - lt);
     //print_matrix(graph);
     //print_matrix(shortest_paths);
     

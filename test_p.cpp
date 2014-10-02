@@ -15,6 +15,8 @@ int main(int argc, char** argv) {
         graph[i]=new int[n];
     int maxn = 3, tmp, d = 0;
     
+#pragma omp parallel    
+#pragma omp for
     //initializing of graph matrix
     for (uint i = 0; i < n; ++i) {
 	for (uint j = 0; j < n; ++j) {
@@ -27,7 +29,11 @@ int main(int argc, char** argv) {
     }
     
     double lt = omp_get_wtime();
-    
+
+#pragma omp parallel
+//~ #pragma omp single
+    //~ printf("Number of threads: %d\n", omp_get_num_threads());
+#pragma omp for schedule(dynamic, 100)
     //computing all paths
     for (uint i = 0; i < n; ++i) {
         for (uint j = 0; j < n; ++j) {

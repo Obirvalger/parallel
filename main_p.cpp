@@ -3,6 +3,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
+#include <omp.h>
 
 using namespace std;
 
@@ -11,12 +12,14 @@ typedef vector<vector<int> > matrix;
 
 void create_graph_file(const char* path) {
     ofstream file(path);
-    uint n_rows = 3;//10 + rand() % 10;
+    uint n_rows = 600;//10 + rand() % 10;
     uint n_cols = n_rows;//10 + rand() % 10;
     int maxn = 3, tmp, d = 0;
     
     file<<n_rows<<endl<<n_cols<<endl;
-    
+
+#pragma omp parallel    
+#pragma omp for    
     for (uint i = 0; i < n_rows; ++i) {
 	for (uint j = 0; j < n_rows; ++j) {
 	    tmp = rand() % (maxn + 1) - d; 
@@ -42,7 +45,7 @@ matrix parse_file(const char* path) {
     
     matrix graph(n_rows, vector<int>(n_cols));
     
-    cout<<"n_rows = "<<n_rows<<" n_cols = "<<n_cols<<endl;
+    //~ cout<<"n_rows = "<<n_rows<<" n_cols = "<<n_cols<<endl;
     
     for (uint i = 0; i < n_rows; ++i) {
 	for (uint j = 0; j < n_cols; ++j) {
@@ -70,6 +73,8 @@ matrix apsp(const matrix& graph) {
     uint n = graph.size();
     matrix result = graph;
     
+#pragma omp parallel    
+#pragma omp for
     for (uint i = 0; i < n; ++i) {
         for (uint j = 0; j < n; ++j) {
 	    for (uint k = 0; k < n; ++k) {
@@ -89,13 +94,16 @@ int main(int argc, char** argv) try {
 	printf("OpenMP is supported!\n");
     #endif
     
+    double lt = omp_get_wtime();
+    
     srand(time(0));
     const char* path = "graph_matrix.txt";
     
     create_graph_file(path);
     matrix graph = parse_file(path), shortest_paths = apsp(graph);
-    print_matrix(graph);
-    print_matrix(shortest_paths);
+    printf("Time is equal %g\n", omp_get_wtime() - lt);
+    //~ print_matrix(graph);
+    //~ print_matrix(shortest_paths);
     
     return 0;
 } catch(const char* str) {
