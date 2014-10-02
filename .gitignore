@@ -3,6 +3,8 @@
 *.out
 test
 main
+test_p
+main_p
 
 # игнорировать все выходные файлы кроме output.txt
 output_*.txt
