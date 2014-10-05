@@ -14,7 +14,9 @@ int main(int argc, char** argv) {
     for(int i=0; i<n; i++)
         graph[i]=new int[n];
     int maxn = 3, tmp, d = 0;
-    
+    uint numthreads = argc > 2 ? atoi(argv[2]) : 8;
+    omp_set_num_threads(numthreads);
+
 #pragma omp parallel    
 #pragma omp for
     //initializing of graph matrix
@@ -32,7 +34,7 @@ int main(int argc, char** argv) {
 
 #pragma omp parallel
 //~ #pragma omp single
-    //~ printf("Number of threads: %d\n", omp_get_num_threads());
+     //~ printf("Number of threads: %d\n", omp_get_num_threads());
 #pragma omp for schedule(dynamic, 100)
     //computing all paths
     for (uint i = 0; i < n; ++i) {
