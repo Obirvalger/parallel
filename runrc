@@ -1,4 +1,5 @@
-begin = 500
-step = 50
-n_steps = 8
-threads = 2 4 8
+begin = 300 #privet
+step = 30
+n_steps = 3
+threads = 2, 8
+outfile = outfile.txt #name of the output file
