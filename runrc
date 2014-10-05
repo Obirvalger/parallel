@@ -1,0 +1,4 @@
+begin = 500
+step = 50
+n_steps = 8
+threads = 2 4 8
