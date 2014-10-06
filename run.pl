@@ -8,7 +8,7 @@ my $n = my $begin = 600;
 my $n_steps = 5;
 my $step = 50;
 my %result;
-my $outfile = "output.txt";
+my ($outfile, $pdf_file) = qw /output.txt table.pdf/;
 my $directly_print = 0;
 
 if ($ARGV[0]) {
@@ -24,6 +24,7 @@ while (<RC>) {
     elsif (s/^\s*n_steps\s*=\s*(\d+).*/$1/) {$n_steps = $_}
     elsif (s/^\s*step\s*=\s*(\d+).*/$1/) {$step = $_}
     elsif (s/^\s*outfile\s*=\s*(["']?)([\.\d\w\s]*[\.\d\w])\1.*/$2/x) {$outfile = $_}
+    elsif (s/^\s*pdf_file\s*=\s*(["']?)([\.\d\w\s]*[\.\d\w])\1.*/$2/x) {$pdf_file = $_}
     elsif (s/^\s*threads\s*=\s*([\d\s,]+).*/$1/) {@threads = split /[\s,]*/}
     elsif (s/^\s*directly_print\s*=\s*(\d).*/$1/) {$directly_print = $_}
     #~ print "$&; $outfile\n";
@@ -68,3 +69,64 @@ unless ($directly_print) {
 }
 
 close $fh;
+
+make_pdf_table(\%result, $pdf_file);
+
+sub make_pdf_table {
+    use File::Temp qw/ tempfile tempdir /;
+    use File::Copy;
+    
+    my ($fh, $filename) = tempfile(SUFFIX => '.tex', DIR => ".", UNLINK => 1);
+    print "fname = $filename\n";
+    my ($href, $pdf_file) = @_;
+    
+    my $hat = <<'END_HAT';
+\documentclass[a4paper, 14pt]{extreport}
+\usepackage[utf8]{inputenc}
+\usepackage[russianb]{babel}
+\usepackage{longtable, moreverb}
+\usepackage{ amssymb, latexsym, amsmath}
+\usepackage{vmargin}
+\setpapersize{A4}
+\setmarginsrb{2cm}{1.5cm}{2cm}{1.5cm}{0pt}{0mm}{0pt}{13mm}
+
+\sloppy
+
+\begin{document}
+
+\begin{center}
+END_HAT
+    my $beg = "\\begin{longtable}[H]{|c|";
+    my $hline = "\\hline \\textnumero";
+    for my $k2 (sort {$a <=> $b} keys %{$href -> {(keys %$href)[0]}}) {
+	    $beg .= 'l|';
+	    $hline .= " & $k2 threads";
+	}
+    $beg .= "}\n";
+    $hline .= "\\\\ \\hline \n";
+    print $hline;
+    my $end = <<'END_END';
+\end{longtable}
+\end{center}
+\end{document}
+END_END
+    
+    print $fh $hat, $beg, $hline;
+    for my $k1 (sort {$a <=> $b} keys %$href) {
+	printf $fh '$%d$ ', $k1;
+	for my $k2 (sort {$a <=> $b} keys %{$href -> {$k1}}) {
+	    printf $fh ('& $%f$ ', $href -> {$k1}{$k2});
+	    #~ printf $fh ("%d=%f ", $k2, $result{$k1}{$k2});
+	}
+	print $fh "\\\\ \\hline \n"
+    }
+    print $fh $end;
+    
+    `pdflatex $filename`;
+    
+    $filename =~ s/(.*).tex/$1/;
+    unlink ($filename . ".aux");
+    unlink ($filename . ".log");
+    move(($filename . ".pdf"), $pdf_file);
+    #~ copy($filename, "tmp.txt") or die "Copy failed: $!";
+}

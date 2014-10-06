@@ -1,5 +1,6 @@
-begin = 300 #privet
-step = 30
-n_steps = 3
-threads = 2, 8
+begin = 300
+step = 50
+n_steps = 14
+threads = 2, 3, 4, 8
 outfile = outfile.txt #name of the output file
+pdf_file = table.pdf
