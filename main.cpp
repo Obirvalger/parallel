@@ -14,7 +14,7 @@ void create_graph_file(const char* path) {
     ofstream file(path);
     uint n_rows = 600;//10 + rand() % 10;
     uint n_cols = n_rows;//10 + rand() % 10;
-    int maxn = 3, tmp, d = 0;
+    int maxn = 5, tmp, d = 0;
     
     file<<n_rows<<endl<<n_cols<<endl;
 

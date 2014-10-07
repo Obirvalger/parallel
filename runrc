@@ -1,6 +1,8 @@
-begin = 300
+begin = 200
 step = 50
-n_steps = 14
-threads = 2, 3, 4, 8
-outfile = outfile.txt #name of the output file
-pdf_file = table.pdf
+n_steps = 10
+threads = (2, 4, 8)
+outfile = "outfile.txt" #name of the output file
+pdf_table_file = "table.pdf"
+write_pdf_table = 1
+directly_print = 0

@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
     int **graph = new int*[n];
     for(int i=0; i<n; i++)
         graph[i]=new int[n];
-    int maxn = 3, tmp, d = 0;
+    int maxn = 5, tmp, d = 0;
     
     //initializing of graph matrix
     for (uint i = 0; i < n; ++i) {
