@@ -3,4 +3,3 @@ step = 100
 n_steps = 20
 threads = 2 4 8
 outfile = table.txt
-directly_print = 1

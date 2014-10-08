@@ -1,8 +1,11 @@
-begin = 200
+begin = 100
 step = 50
-n_steps = 10
-threads = (2, 4, 8)
+n_steps = 13
+threads = (2, 3, 4, 8)
 outfile = "outfile.txt" #name of the output file
+read_data_file = 0
+data_file = "datafile"
 pdf_table_file = "table.pdf"
 write_pdf_table = 1
-directly_print = 0
+pdf_plot_file = "myplot.pdf"
+write_pdf_plot = 1
