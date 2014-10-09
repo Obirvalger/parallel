@@ -2,6 +2,7 @@
 
 use v5.14;
 use warnings;
+use POSIX qw(strftime);
 
 $, = " ";
 
@@ -10,7 +11,8 @@ my $n = my $begin = 600;
 my $n_steps = 5;
 my $step = 50;
 my %result;
-my ($outfile, $pdf_table_file, $pdf_plot_file, $data_file) = qw /output.txt table.pdf myplot.pdf outfile.txt/;
+my ($test, $test_p) = qw/test test_p/;
+my ($outfile, $pdf_table_file, $pdf_plot_file, $data_file) = qw/output.txt table.pdf myplot.pdf outfile.txt/;
 my ($write_pdf_table, $write_pdf_plot, $read_data_file) = (0, 0,0);
 
 if ($ARGV[0]) {
@@ -26,9 +28,11 @@ while (<RC>) {
     elsif (s/^\s*n_steps\s*=\s*(\d+).*/$1/) {$n_steps = $_}
     elsif (s/^\s*step\s*=\s*(\d+).*/$1/) {$step = $_}
     elsif (s/^\s*outfile\s*=\s*(["']?)([\.\d\w\s]*[\.\d\w])\1.*/$2/x) {$outfile = $_}
-    elsif (s/^\s*pdf_table_file\s*=\s*(["']?)([\.\d\w\s]*[\.\d\w])\1.*/$2/x) {$pdf_table_file = $_}
-    elsif (s/^\s*pdf_plot_file\s*=\s*(["']?)([\.\d\w\s]*[\.\d\w])\1.*/$2/x) {$pdf_plot_file = $_}
-    elsif (s/^\s*data_file\s*=\s*(["']?)([\.\d\w\s]*[\.\d\w])\1.*/$2/x) {$data_file = $_}
+    elsif (s/^\s*pdf_table_file\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$pdf_table_file = $_}
+    elsif (s/^\s*pdf_plot_file\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$pdf_plot_file = $_}
+    elsif (s/^\s*data_file\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$data_file = $_}
+    elsif (s/^\s*test\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$test = $_}
+    elsif (s/^\s*test_p\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$test_p = $_}
     elsif (s/^\s*threads\s*=\s*[\[\(]?([\d\s,]+)[\]\)]?.*/$1/) {@threads = split /[\s,]*/}
     elsif (s/^\s*write_pdf_table\s*=\s*(\d).*/$1/) {$write_pdf_table = $_}
     elsif (s/^\s*write_pdf_plot\s*=\s*(\d).*/$1/) {$write_pdf_plot = $_}
@@ -42,7 +46,7 @@ unless ($read_data_file) {
 
     `make test test_p`;
 
-    printf $fh "N 1 ";
+    printf $fh "N ";
     for (@threads) {
 	printf $fh "$_ ";
     }
@@ -50,12 +54,16 @@ unless ($read_data_file) {
 
     for my $i (1 .. $n_steps) {
 	my %times;
-	chomp($times{1} = qx(./test $n));
+	$_ = strftime "%H:%M:%S", gmtime;
+	print "step = $i/$n_steps  n = $n  started $_  duration = ";
+	my $b_time = time;
+	chomp($times{1} = qx(./test $n)) if grep /1/, @threads;
 	for my $j (@threads) {
 	    chomp($times{$j} = qx(./test_p $n $j));
 	}
 	$result{$n} = \%times;
-	printf "step = $i/$n_steps  n = $n  maxtime = %f  mintime = %f\n", $times{1}, $times{$threads[-1]};
+	$_ = strftime "%H:%M:%S", gmtime;
+	printf "%d\n", time - $b_time;
 	printf $fh "%d ", $n;
 	for my $key (sort {$a <=> $b} keys %times) {
 	    printf $fh ("%f ", $times{$key});
@@ -173,7 +181,7 @@ sub make_pdf_plot {
     my @threads = sort {$a <=> $b} keys %{$href -> {(keys %$href)[0]}};
     #~ print "threads " . join(', ', @threads) . "\n";
     
-    print $fh 'pdf(file="myplot.pdf")' . "\n";
+    print $fh "pdf(file=\"$pdf_plot_file\")" . "\n";
     print $fh "par(mar=c(4, 4, 1, 1))\n";
     
     $tmpstr = "x <- c(";

@@ -1,0 +1,11 @@
+begin = 600
+step = 300
+n_steps = 15
+threads = (1, 2, 3, 4, 8)
+outfile = "outfile5.txt" #name of the output file
+read_data_file = 0
+data_file = "datafile"
+pdf_table_file = "table5.pdf"
+write_pdf_table = 1
+pdf_plot_file = "myplot5.pdf"
+write_pdf_plot = 1

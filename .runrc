@@ -1,5 +1,5 @@
-begin = 1000
+begin = 100
 step = 100
-n_steps = 20
+n_steps = 3
 threads = 2 4 8
 outfile = table.txt
