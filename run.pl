@@ -6,13 +6,14 @@ use POSIX qw(strftime);
 
 $, = " ";
 
-my @threads = (8); #array of numbers of threads for parallel program
+my @threads = (8);
 my $n = my $begin = 600;
 my $n_steps = 5;
 my $step = 50;
 my %result;
 my ($test, $test_p) = qw/test test_p/;
 my ($outfile, $pdf_table_file, $pdf_plot_file, $data_file) = qw/output.txt table.pdf myplot.pdf outfile.txt/;
+my ($pdflatex, $Rscript) = qw/pdflatex Rscript/;
 my ($write_pdf_table, $write_pdf_plot, $read_data_file) = (0, 0,0);
 
 if ($ARGV[0]) {
@@ -30,6 +31,8 @@ while (<RC>) {
     elsif (s/^\s*outfile\s*=\s*(["']?)([\.\d\w\s]*[\.\d\w])\1.*/$2/x) {$outfile = $_}
     elsif (s/^\s*pdf_table_file\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$pdf_table_file = $_}
     elsif (s/^\s*pdf_plot_file\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$pdf_plot_file = $_}
+    elsif (s/^\s*pdflatex\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$pdflatex = $_}
+    elsif (s/^\s*Rscript\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$Rscript = $_}
     elsif (s/^\s*data_file\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$data_file = $_}
     elsif (s/^\s*test\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$test = $_}
     elsif (s/^\s*test_p\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$test_p = $_}
@@ -37,7 +40,6 @@ while (<RC>) {
     elsif (s/^\s*write_pdf_table\s*=\s*(\d).*/$1/) {$write_pdf_table = $_}
     elsif (s/^\s*write_pdf_plot\s*=\s*(\d).*/$1/) {$write_pdf_plot = $_}
     elsif (s/^\s*read_data_file\s*=\s*(\d).*/$1/) {$read_data_file = $_}
-    #~ print "$&; $outfile\n";
 }
 
 unless ($read_data_file) {
@@ -67,7 +69,6 @@ unless ($read_data_file) {
 	printf $fh "%d ", $n;
 	for my $key (sort {$a <=> $b} keys %times) {
 	    printf $fh ("%f ", $times{$key});
-	    #~ printf $fh ("%d=%f ", $k2, $times{$key});
 	}
 	print $fh "\n";
     
@@ -91,18 +92,13 @@ sub read_result {
 	or die "cannot open < $fname $!";
     local $_ = <$fh>;
     my @threads = /\d+/g;
-    #~ print "@threads\n";
     while (<$fh>) {
 	my @args = /\d+\.?\d*/g;
-	#~ print @args, "\n";
 	die "wrong number of arguments in $. string:\n$_" if ($#args != $#threads + 1);
 	for (my $i = 0; $i < @threads; ++$i) {
 	    $href -> {$args[0]}{$threads[$i]} = $args[$i + 1];
 	}
     }
-    
-    #~ print Dumper $href;
-    
 }
 
 
@@ -111,7 +107,6 @@ sub make_pdf_table {
     use File::Copy;
     
     my ($fh, $filename) = tempfile(SUFFIX => '.tex', DIR => ".", UNLINK => 1);
-    #~ print "fname = $filename\n";
     my ($href, $pdf_table_file) = @_;
     
     my $hat = <<'END_HAT';
@@ -138,7 +133,6 @@ END_HAT
 	}
     $beg .= "}\n";
     $hline .= "\\\\ \\hline \\hline \n";
-    #~ print $hline;
     my $end = <<'END_END';
 \end{longtable}
 \end{center}
@@ -150,21 +144,18 @@ END_END
 	printf $fh '$%d$ ', $k1;
 	for my $k2 (sort {$a <=> $b} keys %{$href -> {$k1}}) {
 	    printf $fh ('& $%f$ ', $href -> {$k1}{$k2});
-	    #~ printf $fh ("%d=%f ", $k2, $result{$k1}{$k2});
 	}
 	print $fh "\\\\ \\hline \n"
     }
-    #~ print $fh "\\caption{Results}\n\\label{results_functions}\n";
     print $fh $end;
     
     print $fh "\n";
-    `pdflatex $filename`;
+    `$pdflatex $filename`	;
     
     $filename =~ s/(.*).tex/$1/;
     unlink ($filename . ".aux");
     unlink ($filename . ".log");
     move(($filename . ".pdf"), $pdf_table_file);
-    #~ copy($filename, "tmp.txt") or die "Copy failed: $!";
 }
 
 sub make_pdf_plot {
@@ -174,12 +165,9 @@ sub make_pdf_plot {
     use List::MoreUtils qw(firstidx);
     
     my ($fh, $filename) = tempfile(SUFFIX => '.r', DIR => ".", UNLINK => 1);
-    #~ print "fname = $filename\n";
     my ($href, $pdf_plot_file) = @_;
     my $tmpstr;
-    #~ my $max_val;
     my @threads = sort {$a <=> $b} keys %{$href -> {(keys %$href)[0]}};
-    #~ print "threads " . join(', ', @threads) . "\n";
     
     print $fh "pdf(file=\"$pdf_plot_file\")" . "\n";
     print $fh "par(mar=c(4, 4, 1, 1))\n";
@@ -193,7 +181,6 @@ sub make_pdf_plot {
 	$tmpstr = "y$i <- c(";
 	for my $key (sort {$a <=> $b} keys %$href) {
 	    $tmpstr .= $href->{$key}{$i} . ',';
-	    #~ $max_val = $href->{$key}{$i} if not defined($max_val) or $href->{$key}{$i} > $max_val;
 	}
 	chop $tmpstr;
 	$tmpstr .= ")\n";
@@ -213,17 +200,12 @@ sub make_pdf_plot {
     for (my $i = 0; $i < @threads; ++$i) {
 	$colors .= "our_col[" . $i . "]**";
 	$names .= '"' . $threads[$i] . " thread" . ($threads[$i] == 1 ? '' : 's'). "\"**";
-	#~ my $adj = (firstidx { $_ eq $x } @threads) / @threads;
-	#~ print $fh "mtext(side=1, line=-1, text=\"$x threads\", adj=$adj, outer=T, col=our_col[" . (1 + firstidx { $_ eq $x } @threads) . "])\n";
     }
     
     $names = "c(" . join(",", split(/\*\*/, $names)) . ")";
     $colors = "c(" . join(",", split(/\*\*/, $colors)) . ")";
-    #~ my $x_pos = (sort {$a <=> $b} keys %$href)[0];
-    #~ my $y_pos = $max_val;
-    #~ print $fh "legend($x_pos, $y_pos, $names, col=$colors, pch=rep.int(16," , scalar @threads, "))\n";
     print $fh "legend(\"topleft\", inset=.02, $names, fill=rainbow(" , scalar @threads, "))\n";
 
     print $fh "\n";
-    `Rscript $filename`;
+    system "$Rscript $filename";
 }

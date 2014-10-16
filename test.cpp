@@ -3,8 +3,6 @@
 #include <ctime>
 #include <omp.h>
 
-//~ using namespace std;
-
 typedef unsigned int uint;
 
 int main(int argc, char** argv) {
@@ -29,9 +27,9 @@ int main(int argc, char** argv) {
     double lt = omp_get_wtime();
     
     //computing all paths
-    for (uint i = 0; i < n; ++i) {
-        for (uint j = 0; j < n; ++j) {
-	    for (uint k = 0; k < n; ++k) {
+    for (uint k = 0; k < n; ++k) {
+	for (uint i = 0; i < n; ++i) {
+	    for (uint j = 0; j < n; ++j) {
 		if (graph[i][k] >= 0 && graph[k][j] >= 0) {
 		    if (graph[i][j] == -1 || graph[i][k] + graph[k][j] < graph[i][j])
 			graph[i][j] = graph[i][k] + graph[k][j];

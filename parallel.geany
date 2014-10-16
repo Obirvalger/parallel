@@ -1,0 +1,55 @@
+[file_prefs]
+final_new_line=true
+ensure_convert_new_lines=false
+strip_trailing_spaces=false
+replace_tabs=false
+
+[indentation]
+indent_width=4
+indent_type=2
+indent_hard_tab_width=8
+detect_indent=true
+detect_indent_width=false
+indent_mode=2
+
+[project]
+name=pararallel.geany
+base_path=/home/ogneslav/prog/prac/parallel
+description=
+file_patterns=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=80
+
+[files]
+current_page=11
+FILE_NAME_0=2211;C++;0;EUTF-8;2;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Fmain.cpp;0;4
+FILE_NAME_1=1736;C++;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Fmain_p.cpp;0;4
+FILE_NAME_2=70;C++;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ftest.cpp;0;4
+FILE_NAME_3=388;C++;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ftest_p.cpp;0;4
+FILE_NAME_4=265;Make;0;EUTF-8;1;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2FMakefile;0;4
+FILE_NAME_5=4409;Perl;0;EUTF-8;2;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Frun.pl;0;4
+FILE_NAME_6=93;Conf;0;EUTF-8;2;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Frunrc;0;4
+FILE_NAME_7=51;Conf;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2F.runrc;0;4
+FILE_NAME_8=261;C++;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ftmp.cpp;0;4
+FILE_NAME_9=11;Perl;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ftmp.pl;0;4
+FILE_NAME_10=42;Perl;0;EUTF-8;2;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ftests%2Ftest.pl;0;4
+FILE_NAME_11=0;LaTeX;0;EUTF-8;0;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Fdocument.tex;0;4
+
+[VTE]
+last_dir=/home/ogneslav/prog/prac/parallel
+
+[build-menu]
+NF_00_LB=_Собрать
+NF_00_CM=make
+NF_00_WD=
+NF_01_LB=Собрать заданную _цель
+NF_01_CM=make %e
+NF_01_WD=
+EX_00_LB=V_iew PDF File
+EX_00_CM=atril "%e.pdf"
+EX_00_WD=
+EX_01_LB=_View DVI File
+EX_01_CM=atril "%e.dvi"
+EX_01_WD=
