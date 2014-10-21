@@ -24,18 +24,21 @@ long_line_column=80
 
 [files]
 current_page=11
-FILE_NAME_0=2211;C++;0;EUTF-8;2;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Fmain.cpp;0;4
-FILE_NAME_1=1736;C++;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Fmain_p.cpp;0;4
+FILE_NAME_0=2272;C++;0;EUTF-8;2;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Fmain.cpp;0;4
+FILE_NAME_1=1037;C++;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Fmain_p.cpp;0;4
 FILE_NAME_2=70;C++;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ftest.cpp;0;4
-FILE_NAME_3=388;C++;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ftest_p.cpp;0;4
-FILE_NAME_4=265;Make;0;EUTF-8;1;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2FMakefile;0;4
+FILE_NAME_3=744;C++;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ftest_p.cpp;0;4
+FILE_NAME_4=293;Make;0;EUTF-8;1;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2FMakefile;0;4
 FILE_NAME_5=4409;Perl;0;EUTF-8;2;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Frun.pl;0;4
 FILE_NAME_6=93;Conf;0;EUTF-8;2;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Frunrc;0;4
 FILE_NAME_7=51;Conf;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2F.runrc;0;4
 FILE_NAME_8=261;C++;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ftmp.cpp;0;4
 FILE_NAME_9=11;Perl;0;EUTF-8;2;1;1;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ftmp.pl;0;4
-FILE_NAME_10=42;Perl;0;EUTF-8;2;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ftests%2Ftest.pl;0;4
-FILE_NAME_11=0;LaTeX;0;EUTF-8;0;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Fdocument.tex;0;4
+FILE_NAME_10=103;Perl;0;EUTF-8;2;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ftests%2Ftest.pl;0;4
+FILE_NAME_11=2595;LaTeX;0;EUTF-8;0;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Freport.tex;0;4
+FILE_NAME_12=1461;C;0;EUTF-8;0;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Ffw_mpi.c;0;4
+FILE_NAME_13=717;Perl;0;EUTF-8;2;1;0;%2Fhome%2Fogneslav%2Fprog%2Fprac%2Fparallel%2Fmpi_fw_run.pl;0;4
+FILE_NAME_14=3505;C;0;EUTF-8;0;1;0;%2Fhome%2Fogneslav%2Ftmp%2Fmpi_hello_world%2Ffw_mpi.c;0;4
 
 [VTE]
 last_dir=/home/ogneslav/prog/prac/parallel

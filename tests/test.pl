@@ -5,7 +5,7 @@ use warnings;
 
 for my $i (5..10) {
     #~ say "i = $i";
-    my $n = $i * 200;
+    my $n = $i * 10;
     system "../main in$n.txt out$n.txt $n";
     system "../main_p in$n.txt out_p$n.txt";
     open OUTG, "<out$n.txt";

@@ -1,5 +1,5 @@
 CF = -std=c++11 -fopenmp -O3 -o
-TARGET = main main_p test test_p
+TARGET = main main_p test test_p fw_mpi
 
 all: $(TARGET)
 
@@ -14,6 +14,8 @@ test: test.cpp
 	
 test_p: test_p.cpp
 	g++  test_p.cpp $(CF) test_p
-
+	
+fw_mpi: fw_mpi.c
+	mpicc -o fw_mpi fw_mpi.c
 clean:
 	rm -rf $(TARGET) *.o

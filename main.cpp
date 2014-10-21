@@ -11,7 +11,7 @@ typedef unsigned int uint;
 typedef vector<vector<int> > matrix;
 
 void create_graph_file(const char* path, int n) {
-    cout<<"n = "<<n<<endl;
+    //~ cout<<"n = "<<n<<endl;
     ofstream file(path);
     int maxn = 5, tmp, d = 0;
     
