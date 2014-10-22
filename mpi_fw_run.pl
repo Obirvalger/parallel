@@ -8,6 +8,8 @@ use File::Temp "tempfile";
 die "Need two arguments: input output!" if (@ARGV < 2);
 
 my $fw_mpi = "fw_mpi.c";
+my $mpicc = "mpicc";
+my $mpirun = "mpirun";
 open(my $SC, "<$fw_mpi");
 open(my $IG, "<$ARGV[0]");
 open(my $OG, ">$ARGV[1]");
@@ -31,8 +33,11 @@ while(<$SC>) {
 }
 
 rename $fname, "$fw_mpi";
-system("mpicc -o fw_mpi $fw_mpi");
-my $strret = qx(mpirun -n 4 ./fw_mpi);
+system("$mpicc -o fw_mpi.exe $fw_mpi");
+my $strret;
+$strret = qx($mpirun -n 4 ./fw_mpi.exe) if $^O =~ /Linux/i;
+$strret = qx($mpirun -n 4 fw_mpi.exe) if $^O =~ /Win/i;
 my ($strtime, $strout) = split("\n", $strret, 2);
 printf "Time is equal %s\n", $strtime;
 printf $OG "$strout\n";
+unlink "fw_mpi.exe";

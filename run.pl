@@ -11,7 +11,7 @@ my $n = my $begin = 600;
 my $n_steps = 5;
 my $step = 50;
 my %result;
-my ($test, $test_p) = qw/test test_p/;
+my ($test, $test_p) = qw(./test ./test_p);
 my ($outfile, $pdf_table_file, $pdf_plot_file, $data_file) = qw/output.txt table.pdf myplot.pdf outfile.txt/;
 my ($pdflatex, $Rscript) = qw/pdflatex Rscript/;
 my ($write_pdf_table, $write_pdf_plot, $read_data_file) = (0, 0,0);
@@ -28,14 +28,14 @@ while (<RC>) {
     if (s/^\s*begin\s*=\s*(\d+).*/$1/) {$n = $begin = $_}
     elsif (s/^\s*n_steps\s*=\s*(\d+).*/$1/) {$n_steps = $_}
     elsif (s/^\s*step\s*=\s*(\d+).*/$1/) {$step = $_}
-    elsif (s/^\s*outfile\s*=\s*(["']?)([\.\d\w\s]*[\.\d\w])\1.*/$2/x) {$outfile = $_}
-    elsif (s/^\s*pdf_table_file\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$pdf_table_file = $_}
-    elsif (s/^\s*pdf_plot_file\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$pdf_plot_file = $_}
-    elsif (s/^\s*pdflatex\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$pdflatex = $_}
-    elsif (s/^\s*Rscript\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$Rscript = $_}
-    elsif (s/^\s*data_file\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$data_file = $_}
-    elsif (s/^\s*test\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$test = $_}
-    elsif (s/^\s*test_p\s*=\s*(["']?)([\.\d\w\s\/]*[\.\d\w])\1.*/$2/x) {$test_p = $_}
+    elsif (s/^\s*outfile\s*=\s*(["']?)([\.\d\w\s\/:\\]*[\.\d\w])\1.*/$2/x) {$outfile = $_}
+    elsif (s/^\s*pdf_table_file\s*=\s*(["']?)([\.\d\w\s\/:\\]*[\.\d\w])\1.*/$2/x) {$pdf_table_file = $_}
+    elsif (s/^\s*pdf_plot_file\s*=\s*(["']?)([\.\d\w\s\/:\\]*[\.\d\w])\1.*/$2/x) {$pdf_plot_file = $_}
+    elsif (s/^\s*pdflatex\s*=\s*(["']?)([\.\d\w\s\/:\\]*[\.\d\w])\1.*/$2/x) {$pdflatex = $_}
+    elsif (s/^\s*Rscript\s*=\s*(["']?)([\.\d\w\s\/:\\]*[\.\d\w])\1.*/$2/x) {$Rscript = $_}
+    elsif (s/^\s*data_file\s*=\s*(["']?)([\.\d\w\s\/:\\]*[\.\d\w])\1.*/$2/x) {$data_file = $_}
+    elsif (s/^\s*test\s*=\s*(["']?)([\.\d\w\s\/:\\]*[\.\d\w])\1.*/$2/x) {$test = $_}
+    elsif (s/^\s*test_p\s*=\s*(["']?)([\.\d\w\s\/:\\]*[\.\d\w])\1.*/$2/x) {$test_p = $_}
     elsif (s/^\s*threads\s*=\s*[\[\(]?([\d\s,]+)[\]\)]?.*/$1/) {@threads = split /[\s,]*/}
     elsif (s/^\s*write_pdf_table\s*=\s*(\d).*/$1/) {$write_pdf_table = $_}
     elsif (s/^\s*write_pdf_plot\s*=\s*(\d).*/$1/) {$write_pdf_plot = $_}
@@ -46,7 +46,7 @@ unless ($read_data_file) {
     open(my $fh, ">", $outfile)
 	or die "cannot open > $outfile $!";
 
-    `make test test_p`;
+    #~ `make test test_p`;
 
     printf $fh "N ";
     for (@threads) {
@@ -59,9 +59,9 @@ unless ($read_data_file) {
 	$_ = strftime "%H:%M:%S", gmtime;
 	print "step = $i/$n_steps  n = $n  started $_  duration = ";
 	my $b_time = time;
-	chomp($times{1} = qx(./test $n)) if grep /1/, @threads;
+	chomp($times{1} = qx($test $n)) if grep /1/, @threads;
 	for my $j (@threads) {
-	    chomp($times{$j} = qx(./test_p $n $j));
+	    chomp($times{$j} = qx($test_p $n $j));
 	}
 	$result{$n} = \%times;
 	$_ = strftime "%H:%M:%S", gmtime;
